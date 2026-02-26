@@ -1,18 +1,12 @@
 import { createStore } from 'vuex'
-import {
-  loginRequest,
-  signupRequest,
-  createOrder,
-  addToCartServer,
-  fetchCart,
-  removeFromCartServer
-} from '@/utils/api'
+import { loginRequest, signupRequest, createOrder, addToCartServer, fetchCart, removeFromCartServer, getProducts } from '@/utils/api'
 
 export default createStore({
   state: {
     token: localStorage.getItem('myAppToken') || '',
     user: JSON.parse(localStorage.getItem('myAppUser')) || null,
     cart: JSON.parse(localStorage.getItem('myAppCart')) || [],
+    products: [],
   },
   getters: {
     isAuthenticated: state => !!state.token,
@@ -31,16 +25,12 @@ export default createStore({
       localStorage.removeItem('myAppToken');
       localStorage.removeItem('myAppUser');
     },
+    SET_PRODUCTS(state, products) {
+      state.products = products;
+    },
     SET_CART(state, cart) {
       state.cart = cart;
       localStorage.setItem('myAppCart', JSON.stringify(cart));
-    },
-    UPDATE_CART_ITEM_QUANTITY(state, { id, quantity }) {
-      const item = state.cart.find(i => i.id === id);
-      if (item) {
-        item.quantity = quantity;
-        localStorage.setItem('myAppCart', JSON.stringify(state.cart));
-      }
     },
     addToCart(state, product) {
       const item = state.cart.find(i => i.id === product.id);
@@ -76,7 +66,7 @@ export default createStore({
     },
     clearCart(state) {
       state.cart = [];
-      localStorage.setItem('myAppCart', JSON.stringify(state.cart));
+      localStorage.removeItem('myAppCart');
     },
   },
   actions: {
@@ -109,7 +99,8 @@ export default createStore({
             commit('addToCart', product);
           })
           .catch(error => {
-            console.error('Ошибка добавления товара на сервер:', error);
+            console.error('Ошибка добавления на сервер:', error);
+            commit('addToCart', product);
             throw error;
           });
     },
@@ -120,7 +111,6 @@ export default createStore({
           })
           .catch(error => {
             console.error('Ошибка загрузки корзины:', error);
-            throw error;
           });
     },
     REMOVE_FROM_CART({ commit }, cartItemId) {
@@ -129,7 +119,8 @@ export default createStore({
             commit('removeFromCart', cartItemId);
           })
           .catch(error => {
-            console.error('Ошибка удаления товара из корзины:', error);
+            console.error('Ошибка удаления с сервера:', error);
+            commit('removeFromCart', cartItemId);
             throw error;
           });
     },
@@ -144,5 +135,15 @@ export default createStore({
             throw error;
           });
     },
-  },
+    FETCH_PRODUCTS({ commit }) {
+      return getProducts()
+          .then(products => {
+            commit('SET_PRODUCTS', products);
+          })
+          .catch(error => {
+            console.error('Ошибка загрузки товаров:', error);
+            throw error;
+          });
+    }
+  }
 });

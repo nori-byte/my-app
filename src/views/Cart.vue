@@ -60,7 +60,8 @@ export default {
       }
     },
     removeItem(item) {
-      this.$store.commit('removeFromCart', item.id)
+      this.$store.dispatch('REMOVE_FROM_CART', item.id)
+          .catch(() => alert('Не удалось удалить товар'));
     },
     placeOrder() {
       this.$store.dispatch('ORDER_REQUEST')
