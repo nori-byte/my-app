@@ -31,6 +31,12 @@ const routes = [
     component: () => import('../components/Login.vue'),
     beforeEnter: ifNotAuthenticated,
   },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../components/Register.vue'),
+    beforeEnter: ifNotAuthenticated
+  },
 ];
 
 const router = createRouter({

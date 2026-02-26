@@ -1,10 +1,36 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-<!--    <router-link to="/about">About</router-link>-->
+    <template v-if="!isAuthenticated">
+      <router-link to="/login">Вход</router-link> |
+      <router-link to="/register">Регистрация</router-link>
+    </template>
+    <template v-else>
+      <span>Привет, {{ currentUser?.fio || currentUser?.email || 'Пользователь' }}</span>
+      <button @click="logout">Выйти</button>
+    </template>
   </nav>
   <router-view/>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['isAuthenticated', 'currentUser']),
+    userEmail() {
+      return this.currentUser?.email || 'Пользователь'
+    }
+  },
+  methods: {
+    ...mapActions(['logout']),
+    async handleLogout() {
+      await this.logout()
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
 
 <style>
 #app {
