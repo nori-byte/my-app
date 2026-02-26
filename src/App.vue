@@ -42,13 +42,16 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
+body {
+  background: #ccdbef;
+}
 nav {
   padding: 20px;
   background: #9ebcd5;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 20px;
+  align-items: center;
 
 }
 
@@ -59,8 +62,15 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #ffffff;
   text-decoration: none;
 }
-
+button {
+  border-radius: 8px;
+  border:1px  solid #7acad2;
+  color:#7acad2;
+  background: white;
+  height: 25px;
+  font-size: 14px;
+}
 </style>

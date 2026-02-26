@@ -134,7 +134,7 @@ h2 {
 }
 a {
   text-decoration: none;
-  color:#42b983;
+  color:#7acad2;
 }
 .form-group {
   margin-bottom: 1rem;
@@ -154,7 +154,7 @@ a {
 }
 .form-group input:focus {
   outline: none;
-  border-color: #42b983;
+  border-color: #7acad2;
   box-shadow: 0 0 0 2px rgba(66,185,131,0.2);
 }
 input.error {
@@ -174,7 +174,7 @@ input.error {
 button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #42b983;
+  background-color: #7acad2;
   color: white;
   border: none;
   border-radius: 4px;
@@ -183,10 +183,10 @@ button {
   transition: background-color 0.3s;
 }
 button:hover:not(:disabled) {
-  background-color: #3aa876;
+  background-color: #7acad2;
 }
 button:disabled {
-  background-color: #a5d6b8;
+  background-color: #7acad2;
   cursor: not-allowed;
 }
 .register-link {

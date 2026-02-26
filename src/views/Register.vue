@@ -143,7 +143,7 @@ export default {
 }
 a {
   text-decoration: none;
-  color:#42b983;
+  color:#7acad2;
 }
 .register-form {
   background: white;
@@ -175,8 +175,8 @@ h2 {
 }
 .form-group input:focus {
   outline: none;
-  border-color: #42b983;
-  box-shadow: 0 0 0 2px rgba(66,185,131,0.2);
+  border-color: #7acad2;
+  box-shadow: 0 0 0 2px rgba(137, 231, 226, 0.2);
 }
 input.error {
   border-color: #e74c3c;
@@ -195,7 +195,7 @@ input.error {
 button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #42b983;
+  background-color: #7acad2;
   color: white;
   border: none;
   border-radius: 4px;
@@ -204,10 +204,10 @@ button {
   transition: background-color 0.3s;
 }
 button:hover:not(:disabled) {
-  background-color: #3aa876;
+  background-color: #7acad2;
 }
 button:disabled {
-  background-color: #a5d6b8;
+  background-color: #7acad2;
   cursor: not-allowed;
 }
 .login-link {
