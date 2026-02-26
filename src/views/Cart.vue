@@ -50,17 +50,19 @@ export default {
   },
   methods: {
     increaseQuantity(item) {
-      this.$store.commit('incrementItem', item.id)
+      this.$store.dispatch('INCREMENT_ITEM', item)
+          .catch(() => alert('Не удалось увеличить количество'));
     },
     decreaseQuantity(item) {
       if (item.quantity > 1) {
-        this.$store.commit('decrementItem', item.id)
+        this.$store.dispatch('DECREMENT_ITEM', item)
+            .catch(() => alert('Не удалось уменьшить количество'));
       } else {
-        this.removeItem(item)
+        this.removeItem(item);
       }
     },
     removeItem(item) {
-      this.$store.dispatch('REMOVE_FROM_CART', item.id)
+      this.$store.dispatch('REMOVE_FROM_CART', item)
           .catch(() => alert('Не удалось удалить товар'));
     },
     placeOrder() {

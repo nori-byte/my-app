@@ -63,7 +63,7 @@ export const createOrder = () => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('myAppToken')}`,
+            'Authorization': `Bearer ${localStorage.getItem('myAppToken')}`
         },
     })
         .then(async response => {

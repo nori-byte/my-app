@@ -1,37 +1,4 @@
-<!--<template>-->
-<!--  <div class="list-of-products">-->
-<!--    <h2>Список товаров</h2>-->
-<!--    <div class="products-container">-->
-<!--      <Product-->
-<!--          v-for="product in products"-->
-<!--          :key="product.id"-->
-<!--          :product="product"-->
-<!--          @add-to-cart="addToCart(product)"/>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
-<!--<script>-->
-<!--import Product from '@/components/product.vue';-->
 
-<!--export default {-->
-<!--  components: { Product },-->
-<!--  data() {-->
-<!--    return {-->
-<!--      products: [-->
-<!--        {id: 1, name: 'Товар 1', description: 'Описание товара 1', price: 1000},-->
-<!--        {id: 2, name: 'Товар 2', description: 'Описание товара 2', price: 1500}-->
-<!--      ]-->
-<!--    };-->
-<!--  },-->
-<!--  methods: {-->
-<!--    addToCart(product) {-->
-<!--      this.$store.dispatch('ADD_TO_CART', product)-->
-<!--          .then(() => alert('Товар добавлен'))-->
-<!--          .catch(err => alert('Ошибка добавления'));-->
-<!--    }-->
-<!--  }-->
-<!--};-->
-<!--</script>-->
 <template>
   <div class="list-of-products">
     <h2>Список товаров</h2>
@@ -68,3 +35,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+button {
+  width: 100px;
+  height: 20px;
+  border-radius: 10px;
+  color: #2c3e50;
+}
+</style>

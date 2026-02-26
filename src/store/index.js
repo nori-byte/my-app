@@ -1,5 +1,14 @@
 import { createStore } from 'vuex'
-import { loginRequest, signupRequest, createOrder, addToCartServer, fetchCart, removeFromCartServer, getProducts } from '@/utils/api'
+import {
+  loginRequest,
+  signupRequest,
+  createOrder,
+  addToCartServer,
+  fetchCart,
+  removeFromCartServer,
+  getProducts,
+  getOrders
+} from '@/utils/api'
 
 export default createStore({
   state: {
@@ -28,9 +37,38 @@ export default createStore({
     SET_PRODUCTS(state, products) {
       state.products = products;
     },
-    SET_CART(state, cart) {
-      state.cart = cart;
-      localStorage.setItem('myAppCart', JSON.stringify(cart));
+    SET_CART(state, cartFromServer) {
+      if (!Array.isArray(cartFromServer)) {
+        console.error('SET_CART: получен не массив', cartFromServer);
+        return;
+      }
+
+      const grouped = {};
+      cartFromServer.forEach(item => {
+        if (!item.product_id) {
+          console.warn('Элемент корзины без product_id:', item);
+          return;
+        }
+        const productId = item.product_id;
+        if (!grouped[productId]) {
+          grouped[productId] = {
+            id: productId,
+            name: item.name || 'Без названия',
+            price: item.price || 0,
+            quantity: 0,
+            cartItemIds: []
+          };
+        }
+        grouped[productId].quantity++;
+        if (item.id) {
+          grouped[productId].cartItemIds.push(item.id);
+        } else {
+          console.warn('Элемент корзины без id:', item);
+        }
+      });
+
+      state.cart = Object.values(grouped);
+      localStorage.setItem('myAppCart', JSON.stringify(state.cart));
     },
     addToCart(state, product) {
       const item = state.cart.find(i => i.id === product.id);
@@ -93,6 +131,9 @@ export default createStore({
     logout({ commit }) {
       commit('AUTH_ERROR');
     },
+    FETCH_ORDERS() {
+      return getOrders();
+    },
     ADD_TO_CART({ commit }, product) {
       return addToCartServer(product.id)
           .then(() => {
@@ -100,7 +141,6 @@ export default createStore({
           })
           .catch(error => {
             console.error('Ошибка добавления на сервер:', error);
-            commit('addToCart', product);
             throw error;
           });
     },
@@ -113,14 +153,19 @@ export default createStore({
             console.error('Ошибка загрузки корзины:', error);
           });
     },
-    REMOVE_FROM_CART({ commit }, cartItemId) {
-      return removeFromCartServer(cartItemId)
+    REMOVE_FROM_CART({ commit, dispatch }, productGroup) {
+      if (!productGroup.cartItemIds || !Array.isArray(productGroup.cartItemIds)) {
+        return Promise.reject('Ошибка: нет идентификаторов');
+      }
+      const promises = productGroup.cartItemIds.map(id => removeFromCartServer(id));
+      return Promise.all(promises)
           .then(() => {
-            commit('removeFromCart', cartItemId);
+            return dispatch('FETCH_CART');
+          })
+          .then(() => {
           })
           .catch(error => {
             console.error('Ошибка удаления с сервера:', error);
-            commit('removeFromCart', cartItemId);
             throw error;
           });
     },
@@ -144,6 +189,35 @@ export default createStore({
             console.error('Ошибка загрузки товаров:', error);
             throw error;
           });
+    },
+    INCREMENT_ITEM({ commit }, productGroup) {
+      return addToCartServer(productGroup.id)
+          .then(() => {
+            commit('incrementItem', productGroup.id);
+          })
+          .catch(error => {
+            console.error('Ошибка увеличения количества:', error);
+            throw error;
+          });
+    },
+
+    DECREMENT_ITEM({ commit }, productGroup) {
+      if (!productGroup.cartItemIds || productGroup.cartItemIds.length === 0) {
+        return Promise.reject('Нет позиций для удаления');
+      }
+      const cartItemId = productGroup.cartItemIds[productGroup.cartItemIds.length - 1];
+      return removeFromCartServer(cartItemId)
+          .then(() => {
+            if (productGroup.quantity > 1) {
+              commit('decrementItem', productGroup.id);
+            } else {
+              commit('removeFromCart', productGroup.id);
+            }
+          })
+          .catch(error => {
+            console.error('Ошибка уменьшения количества:', error);
+            throw error;
+          });
     }
-  }
+  },
 });
