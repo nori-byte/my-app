@@ -60,9 +60,29 @@ export default createStore({
       const item = state.cart.find(i => i.id === productId);
       if (item) item.quantity++;
     },
+    decrementItem(state, productId) {
+      const item = state.cart.find(i => i.id === productId);
+      if (item) item.quantity--;
+    },
     AUTH_ERROR(state) {
       state.token = '';
       state.user = null;
+    },
+    addToCart(state, product) {
+      const item = state.cart.find(i => i.id === product.id);
+      if (item) {
+        item.quantity++;
+      } else {
+        state.cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: 1
+        });
+      }
+    },
+    removeFromCart(state, productId) {
+      state.cart = state.cart.filter(item => item.id !== productId);
     },
   },
   actions: {
