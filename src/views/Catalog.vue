@@ -24,15 +24,17 @@ export default {
   data() {
     return {
       products: [
-        { id: 1, name: 'Товар 1', description: 'Описание товара 1', price: 1000 },
-        { id: 2, name: 'Товар 2', description: 'Описание товара 2', price: 1500 }
+        {id: 1, name: 'Товар 1', description: 'Описание товара 1', price: 1000},
+        {id: 2, name: 'Товар 2', description: 'Описание товара 2', price: 1500}
       ],
       cart: []
     };
   },
   methods: {
-    addToCart(productId) {
-      this.$store.dispatch('addToCart', { productId, quantity: 1 });
+    addToCart() {
+      this.$store.dispatch('ADD_TO_CART', this.product)
+          .then(() => alert('Товар добавлен'))
+          .catch(err => alert('Ошибка'));
     }
   }
 }

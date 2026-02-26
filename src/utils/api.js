@@ -1,20 +1,3 @@
-// const API =process.env.VUE_APP_API;
-// export const loginRequest = (user) => {
-//     return new Promise((resolve, reject) => {
-//         fetch(`${API}/login`,{
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json;charset=utf-8',
-//             },
-//             body: JSON.stringify(user),
-//         })
-//             .then((response) => response.json())
-//             .then((result) => resolve(result.data.user_token))
-//             .catch((error) => {
-//
-//             });
-//     });
-// };
 const API = process.env.VUE_APP_API;
 
 export const loginRequest = (credentials) => {
@@ -23,22 +6,21 @@ export const loginRequest = (credentials) => {
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
         },
-        body: JSON.stringify(credentials), // теперь credentials = { email, password }
+        body: JSON.stringify(credentials),
     })
         .then(async response => {
             if (!response.ok) {
-                // Пытаемся получить тело ошибки
                 const errorData = await response.json().catch(() => ({}));
                 throw { status: response.status, data: errorData };
             }
             return response.json();
         })
         .then(result => {
-            // Успешный ответ: { data: { user_token: "..." } }
             const token = result.data.user_token;
-            return { token, user: { email: credentials.email } }; // можно сохранить email
+            return { token, user: { email: credentials.email } };
         });
 };
+
 export const signupRequest = (userData) => {
     return fetch(`${API}/signup`, {
         method: 'POST',
@@ -55,8 +37,89 @@ export const signupRequest = (userData) => {
             return response.json();
         })
         .then(result => {
-            // При успешной регистрации возвращается токен
             const token = result.data.user_token;
             return { token, user: { email: userData.email, fio: userData.fio } };
+        });
+};
+
+export const getOrders = () => {
+    return fetch(`${API}/order`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw { status: response.status, data: errorData };
+            }
+            return response.json();
+        })
+        .then(result => result.data);
+};
+export const createOrder = () => {
+    return fetch(`${API}/order`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('myAppToken')}`,
+        },
+    })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw { status: response.status, data: errorData };
+            }
+            return response.json();
+        });
+};
+// Добавить товар в корзину на сервере
+export const addToCartServer = (productId) => {
+    return fetch(`${API}/cart/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('myAppToken')}`
+        }
+    })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw { status: response.status, data: errorData };
+            }
+            return response.json();
+        });
+};
+export const fetchCart = () => {
+    return fetch(`${API}/cart`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('myAppToken')}`
+        }
+    })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw { status: response.status, data: errorData };
+            }
+            return response.json();
+        })
+        .then(result => result.data);
+};
+
+export const removeFromCartServer = (cartItemId) => {
+    return fetch(`${API}/cart/${cartItemId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('myAppToken')}`
+        }
+    })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw { status: response.status, data: errorData };
+            }
+            return response.json();
         });
 };

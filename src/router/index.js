@@ -40,14 +40,21 @@ const routes = [
     path: '/catalog',
     name: 'catalog',
     component: () => import('../views/Catalog.vue'),
-    beforeEnter: ifNotAuthenticated
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/cart',
     name: 'cart',
     component: () => import('../views/Cart.vue'),
-    beforeEnter: ifNotAuthenticated
+    beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/orders',
+    name: 'orders',
+    component: () => import('../views/Orders.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+
 ];
 
 const router = createRouter({

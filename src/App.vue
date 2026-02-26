@@ -3,12 +3,12 @@
     <router-link to="/">Home</router-link> |
     <template v-if="!isAuthenticated">
       <router-link to="/login">Вход</router-link> |
-      <router-link to="/register">Регистрация</router-link> |
-      <router-link to="/catalog">Каталог</router-link> |
-      <router-link to="/cart">Корзинка</router-link> |
+      <router-link to="/register">Регистрация</router-link>
     </template>
     <template v-else>
-<!--      <span>Привет, {{ currentUser?.fio || 'Пользователь' }}</span>-->
+      <router-link to="/catalog">Каталог</router-link> |
+      <router-link to="/cart">Корзинка</router-link> |
+      <router-link to="/orders">Оформленные заказы</router-link> |
       <button @click="logout">Выйти</button>
     </template>
   </nav>

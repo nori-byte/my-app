@@ -1,8 +1,6 @@
 <template>
   <div class="cart">
     <h2>Корзина</h2>
-
-    <!-- Если корзина пуста -->
     <div v-if="cart.length === 0" class="empty-cart">
       Корзина пуста
     </div>
@@ -40,21 +38,20 @@ import { mapState } from 'vuex'
 export default {
   name: 'Cart',
   computed: {
-    // Получаем корзину из состояния Vuex
     ...mapState({
       cart: state => state.cart
     }),
-    // Общая стоимость товаров
     totalPrice() {
       return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     }
   },
+  created() {
+    this.$store.dispatch('FETCH_CART');
+  },
   methods: {
-    // Увеличить количество товара
     increaseQuantity(item) {
       this.$store.commit('incrementItem', item.id)
     },
-    // Уменьшить количество (если станет 0 — товар удаляется)
     decreaseQuantity(item) {
       if (item.quantity > 1) {
         this.$store.commit('decrementItem', item.id)
@@ -62,16 +59,17 @@ export default {
         this.removeItem(item)
       }
     },
-    // Удалить товар из корзины
     removeItem(item) {
       this.$store.commit('removeFromCart', item.id)
     },
-    // Оформить заказ
     placeOrder() {
-      // Здесь будет вызов API для оформления заказа
-      alert('Заказ оформлен!')
-      // После успешного оформления можно очистить корзину
-      // this.$store.commit('clearCart')
+      this.$store.dispatch('ORDER_REQUEST')
+          .then(() => {
+            this.$router.push('/orders');
+          })
+          .catch(error => {
+            alert('Не удалось оформить заказ. Попробуйте позже.');
+          });
     }
   }
 }
