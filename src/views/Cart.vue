@@ -5,7 +5,6 @@
       Корзина пуста
     </div>
 
-    <!-- Если есть товары -->
     <template v-else>
       <ul class="cart-list">
         <li v-for="item in cart" :key="item.id" class="cart-item">
@@ -51,19 +50,14 @@ export default {
   methods: {
     increaseQuantity(item) {
       this.$store.dispatch('INCREMENT_ITEM', item)
-          .catch(() => alert('Не удалось увеличить количество'));
     },
     decreaseQuantity(item) {
       if (item.quantity > 1) {
         this.$store.dispatch('DECREMENT_ITEM', item)
-            .catch(() => alert('Не удалось уменьшить количество'));
-      } else {
-        this.removeItem(item);
       }
     },
     removeItem(item) {
       this.$store.dispatch('REMOVE_FROM_CART', item)
-          .catch(() => alert('Не удалось удалить товар'));
     },
     placeOrder() {
       this.$store.dispatch('ORDER_REQUEST')
@@ -109,11 +103,9 @@ h2 {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  border-bottom: 1px solid #eee;
-  background: white;
   border-radius: 8px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #e1f2ff;
 }
 
 .item-info {
@@ -142,9 +134,8 @@ h2 {
 .quantity-controls button {
   width: 30px;
   height: 30px;
-  border: 1px solid #42b983;
-  background: white;
-  color: #42b983;
+  border: 1px solid #7acad2;
+  color: #7acad2;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1.2rem;
@@ -154,7 +145,7 @@ h2 {
 }
 
 .quantity-controls button:hover:not(:disabled) {
-  background: #42b983;
+  background: #7acad2;
   color: white;
 }
 
@@ -170,24 +161,26 @@ h2 {
 }
 
 .remove-btn {
-  background: #e74c3c;
+  background: #da867e;
+  height: 40px;
   color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s;
+
 }
 
 .remove-btn:hover {
-  background: #c0392b;
+  background: #d77267;
 }
 
 .cart-footer {
   margin-top: 30px;
   text-align: right;
   padding: 20px;
-  background: #f9f9f9;
+  background: #e1f2ff;
   border-radius: 8px;
 }
 
@@ -195,14 +188,14 @@ h2 {
   font-size: 1.3rem;
   font-weight: bold;
   margin-bottom: 15px;
-  color: #2c3e50;
+  color: #7acad2;
 }
 
 .order-btn {
-  background: #42b983;
+  background: #7acad2;
+  height: 40px;
   color: white;
   border: none;
-  padding: 12px 30px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1.1rem;
@@ -210,6 +203,6 @@ h2 {
 }
 
 .order-btn:hover {
-  background: #3aa876;
+  background: #7acad2;
 }
 </style>

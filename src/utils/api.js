@@ -42,22 +42,37 @@ export const signupRequest = (userData) => {
         });
 };
 
-export const getOrders = () => {
-    return fetch(`${API}/order`, {
+// export const getOrders = () => {
+//     return fetch(`${API}/order`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//     })
+//         .then(async response => {
+//             if (!response.ok) {
+//                 const errorData = await response.json().catch(() => ({}));
+//                 throw { status: response.status, data: errorData };
+//             }
+//             return response.json();
+//         })
+//         .then(result => result.data);
+// };
+
+export async function getOrders(){
+    const response = await fetch(`${API}/order`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
     })
-        .then(async response => {
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw { status: response.status, data: errorData };
-            }
-            return response.json();
-        })
-        .then(result => result.data);
-};
+    if(!response.ok){
+        const errorData = await response.json().catch(() => ({}));
+        throw { status: response.status, data: errorData };
+    }
+    return response.json();
+
+}
 export const createOrder = () => {
     return fetch(`${API}/order`, {
         method: 'POST',
