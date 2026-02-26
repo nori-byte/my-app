@@ -3,10 +3,12 @@
     <router-link to="/">Home</router-link> |
     <template v-if="!isAuthenticated">
       <router-link to="/login">Вход</router-link> |
-      <router-link to="/register">Регистрация</router-link>
+      <router-link to="/register">Регистрация</router-link> |
+      <router-link to="/catalog">Каталог</router-link> |
+      <router-link to="/cart">Корзинка</router-link> |
     </template>
     <template v-else>
-      <span>Привет, {{ currentUser?.fio || currentUser?.email || 'Пользователь' }}</span>
+<!--      <span>Привет, {{ currentUser?.fio || 'Пользователь' }}</span>-->
       <button @click="logout">Выйти</button>
     </template>
   </nav>
@@ -18,8 +20,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['isAuthenticated', 'currentUser']),
-    userEmail() {
-      return this.currentUser?.email || 'Пользователь'
+    userFio() {
+      return this.currentUser?.fio || 'Пользователь'
     }
   },
   methods: {
@@ -42,15 +44,23 @@ export default {
 }
 
 nav {
-  padding: 30px;
+  padding: 20px;
+  background: #9ebcd5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
 }
 
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  text-decoration: none;
 }
 
 nav a.router-link-exact-active {
   color: #42b983;
+  text-decoration: none;
 }
+
 </style>

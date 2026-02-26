@@ -2,12 +2,10 @@
   <div class="register-container">
     <form class="register-form" @submit.prevent="register">
       <h2>Регистрация</h2>
-
       <div class="form-group">
         <label>ФИО</label>
         <input type="text" v-model="fio" required placeholder="Иванов Иван Иванович" />
       </div>
-
       <div class="form-group">
         <label>Email</label>
         <input type="email" v-model="email" required placeholder="admin@admin.ru" />
@@ -17,16 +15,13 @@
         <label>Пароль</label>
         <input type="password" v-model="password" required placeholder="******" />
       </div>
-
-      <button type="submit" :disabled="loading">
-        {{ loading ? 'Регистрация...' : 'Зарегистрироваться' }}
-      </button>
-
+      <button type="submit">Регистрация</button>
       <p v-if="error" class="error">{{ error }}</p>
       <p>Уже есть аккаунт? <router-link to="/login">Войти</router-link></p>
     </form>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -40,29 +35,6 @@ export default {
     }
   },
   methods: {
-//     register() {
-//       this.loading = true
-//       this.error = ''
-//       const userData = {
-//         fio: this.fio,
-//         email: this.email,
-//         password: this.password
-//       }
-//       this.$store.dispatch('REGISTER_REQUEST', userData)
-//           .then(() => {
-//             // После успешной регистрации сразу входим или переходим на страницу входа
-//             this.$router.push('/login')
-//           })
-//           .catch(error => {
-//             this.error = error.message || 'Ошибка регистрации'
-//             console.error(error)
-//           })
-//           .finally(() => {
-//             this.loading = false
-//           })
-//     }
-//   }
-// }
     register() {
       this.loading = true;
       this.error = '';
@@ -78,11 +50,8 @@ export default {
           .catch(error => {
             console.error('Полная ошибка:', error);
             let errorMessage = 'Ошибка регистрации';
-
-            // Пытаемся извлечь сообщения из разных форматов ответа
             if (error.data) {
               if (error.data.error && error.data.error.errors) {
-                // формат { error: { errors: { поле: ["сообщение"] } } }
                 const errors = error.data.error.errors;
                 const messages = [];
                 for (let field in errors) {
@@ -90,7 +59,7 @@ export default {
                 }
                 errorMessage = messages.join('; ');
               } else if (error.data.errors) {
-                // если errors массив или объект
+
                 if (Array.isArray(error.data.errors)) {
                   errorMessage = error.data.errors.join('; ');
                 } else if (typeof error.data.errors === 'object') {
@@ -118,6 +87,10 @@ export default {
 </script>
 
 <style scoped>
+a {
+  color: #42b983;
+  text-decoration: none
+}
 .register-container {
   display: flex;
   justify-content: center;
@@ -146,7 +119,7 @@ h2 {
 }
 .form-group input {
   width: 100%;
-  padding: 0.75rem;
+  height: 40px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;

@@ -1,6 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import store from '@/store'
-
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -23,18 +22,30 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('../views/HomeView.vue'),
-    beforeEnter: ifAuthenticated,
+    // beforeEnter: ifAuthenticated,
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('../components/Login.vue'),
+    component: () => import('../views/Login.vue'),
     beforeEnter: ifNotAuthenticated,
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('../components/Register.vue'),
+    component: () => import('../views/Register.vue'),
+    beforeEnter: ifNotAuthenticated
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
+    component: () => import('../views/Catalog.vue'),
+    beforeEnter: ifNotAuthenticated
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('../views/Cart.vue'),
     beforeEnter: ifNotAuthenticated
   },
 ];

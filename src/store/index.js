@@ -42,7 +42,10 @@ import { loginRequest, signupRequest } from '@/utils/api'
 export default createStore({
   state: {
     token: localStorage.getItem('myAppToken') || '',
-    user: null,
+    user: JSON.parse(localStorage.getItem('myAppUser')) || null,
+    cart: [],
+
+
   },
   getters: {
     isAuthenticated: state => !!state.token,
@@ -52,6 +55,10 @@ export default createStore({
     AUTH_SUCCESS(state, { token, user }) {
       state.token = token;
       state.user = user;
+    },
+    incrementItem(state, productId) {
+      const item = state.cart.find(i => i.id === productId);
+      if (item) item.quantity++;
     },
     AUTH_ERROR(state) {
       state.token = '';
